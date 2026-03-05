@@ -29,9 +29,11 @@ app.use(helmet());
 // Enable CORS
 app.use(
     cors({
-        origin: env.NODE_ENV === 'production' ? [] : '*',
+        origin: env.NODE_ENV === 'production'
+            ? ['https://ahi-admin.hyperlinq.xyz', 'https://ahi.hyperlinq.xyz', 'http://localhost:3000', 'http://localhost:3001']
+            : '*',
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
         credentials: true,
     })
 );
