@@ -36,7 +36,7 @@ export class AuthRepository {
     async findSessionByToken(refreshToken: string) {
         return prisma.session.findUnique({
             where: { refreshToken },
-            include: { user: true },
+            include: { user: { include: { role: true } } },
         });
     }
 

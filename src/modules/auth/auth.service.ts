@@ -34,11 +34,11 @@ export class AuthService {
         });
 
         // Generate tokens
-        const tokens = generateTokenPair({ userId: user.id, role: customerRole.name });
+        const tokens = generateTokenPair({ userId: user.id, email: user.email, role: customerRole.name });
 
         // Save refresh token session
         await authRepository.createSession({
-            userId: user.id,
+            user: { connect: { id: user.id } },
             refreshToken: tokens.refreshToken,
             userAgent: data.userAgent,
             ipAddress: data.ipAddress,
@@ -67,11 +67,11 @@ export class AuthService {
         }
 
         // Generate tokens
-        const tokens = generateTokenPair({ userId: user.id, role: user.role.name });
+        const tokens = generateTokenPair({ userId: user.id, email: user.email, role: user.role.name });
 
         // Save refresh token session
         await authRepository.createSession({
-            userId: user.id,
+            user: { connect: { id: user.id } },
             refreshToken: tokens.refreshToken,
             userAgent: data.userAgent,
             ipAddress: data.ipAddress,
@@ -100,12 +100,12 @@ export class AuthService {
         }
 
         // Generate new tokens
-        const tokens = generateTokenPair({ userId: session.user.id, role: session.user.roleId /* role name is normally better here, but we'd need to fetch user w/ role */ });
+        const tokens = generateTokenPair({ userId: session.user.id, email: session.user.email, role: session.user.role.name });
 
         // Replace session
         await authRepository.deleteSession(session.id);
         await authRepository.createSession({
-            userId: session.user.id,
+            user: { connect: { id: session.user.id } },
             refreshToken: tokens.refreshToken,
             userAgent,
             ipAddress,
